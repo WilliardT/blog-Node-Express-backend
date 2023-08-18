@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 import {loginValidation, registerValidation} from "./validations/auth.js";
 import checkAuth from "./utils/checkAuth.js";
 import {getMe, login, register} from "./controllers/UserController.js";
-import {create, getAll, getOne, remove, update} from "./controllers/PostController.js";
+import {create, getAll, getLastTags, getOne, remove, update} from "./controllers/PostController.js";
 import {postCreateValidation} from "./validations/post.js";
 import multer from "multer";
 import handleValidationErrors from "./utils/handleValidationErrors.js";
+import cors from "cors";
+
 
 mongoose
     .connect('mongodb+srv://reactdeveloper:P6GTUZzG0ZEi056d@cluster0.ow7te3j.mongodb.net/blog?retryWrites=true&w=majority')
@@ -31,6 +33,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 app.use(express.json());
+app.use(cors());
 app.use('/uploads', express.static('uploads'))
 
 app.post("/auth/login", loginValidation, handleValidationErrors, login)
@@ -43,7 +46,10 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
     })
 })
 
+app.get('/tags', getLastTags)
+
 app.get('/posts', getAll)
+app.get('posts/tags', getLastTags)
 app.get('/posts/:id', getOne)
 app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, create)
 app.delete('/posts/:id', checkAuth, remove)
