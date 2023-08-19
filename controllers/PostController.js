@@ -46,7 +46,7 @@ export const getOne = async (req, res) => {
                 new: true,
                 //returnDocument: 'after',
             }
-        )
+        ).populate('user')
 
         res.json(doc)
 
