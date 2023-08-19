@@ -8,6 +8,7 @@ import {postCreateValidation} from "./validations/post.js";
 import multer from "multer";
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import cors from "cors";
+import * as fs from "fs";
 
 
 mongoose
@@ -22,13 +23,16 @@ mongoose
 const app = express();
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/')
+    destination: function (_, __, cb) {
+        if (!fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads')
+        }
+        cb(null, 'uploads')
     },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
+    filename: function (_, file, cb) {
+        cb(null, file.originalname)
     }
-})
+});
 
 const upload = multer({storage: storage})
 
