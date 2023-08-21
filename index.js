@@ -55,9 +55,12 @@ app.get('/tags', getLastTags)
 app.get('/posts', getAll)
 app.get('posts/tags', getLastTags)
 app.get('/posts/:id', getOne)
+// создание статьи / поста
 app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, create)
+
+// удаление статьи / поста
 app.delete('/posts/:id', checkAuth, remove)
-app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors, update)
+app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors, update);
 
 
 app.listen(5000, (error) => {
@@ -65,4 +68,4 @@ app.listen(5000, (error) => {
         console.log(error);
     }
     console.log('Server is running on port 5000');
-})
+});
